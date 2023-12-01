@@ -50,10 +50,6 @@ def get_weather2():
     baseDate = date
     baseTime = time
 
-    # 예보지점 X 좌표 (서울시 강남구 역삼동)
-    # nx_val = 62
-    # ny_val = 126
-
     # 한 페이지에 포함된 결과 수
     num_of_rows = 6
     # 페이지 번호
@@ -68,7 +64,11 @@ def get_weather2():
                      'dataType': data_type}
 
     # 요청 및 응답
-    r = requests.get(url, params=req_parameter)
+    try:
+        r = requests.get(url, params=req_parameter)
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred while making a request: {e}")
+        return json.dumps({"error": str(e)}, ensure_ascii=False)
 
     # JSON 형태로 응답받은 데이터를 딕셔너리로 변환
     dict_data = r.json()
@@ -87,12 +87,12 @@ def get_weather2():
     for k in range(len(weather_items)):
         weather_item = weather_items[k]
         obsrValue = weather_item['obsrValue']
-        if weather_item['category'] == 'T1H':
+        if weather_item['category'] == 'T1H': # 기온
             weather_data['tmp'] = f"{obsrValue}℃"
-        elif weather_item['category'] == 'REH':
+        elif weather_item['category'] == 'REH': # 습도
             weather_data['hum'] = f"{obsrValue}%"
-        elif weather_item['category'] == 'RN1':
+        elif weather_item['category'] == 'RN1': # 시간당 강수량
             weather_data['pre'] = f"{obsrValue}mm"
-    # 딕셔너리를 JSON 형태로 변환
+    # 딕셔너리를 JSON 형태로 변환, # ensure_ascii=False를 설정하여 JSON에 유니코드 문자 포함
     json_weather = json.dumps(weather_data, ensure_ascii=False, indent=4)
     return json_weather
