@@ -45,7 +45,7 @@ app.add_url_rule('/api/query', 'get_query', get_query, methods=['GET'])
 app.add_url_rule('/api/item/<item_id>', 'get_path_item', get_path_item, methods=['GET'])
 app.add_url_rule('/api/movie', 'get_movie', get_movie, methods=['GET'])
 app.add_url_rule('/api/graph', 'demo_graph', demo_graph, methods=['GET'])
-app.add_url_rule('/api/gender', 'gender_data', gender_data, methods=['GET'])
+app.add_url_rule('/api/gender/<region>', 'gender_data', gender_data, methods=['GET'])
 
 if __name__ == '__main__':
     app.run(debug=True)
