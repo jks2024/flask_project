@@ -2,7 +2,6 @@ import csv
 import json
 from flask import jsonify, request
 
-
 def demo_graph():
     f = open('./data/age.csv', encoding='cp949')
     data = csv.reader(f)
