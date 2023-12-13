@@ -32,7 +32,7 @@ def get_movie():
 
         movie_data.append({
             'rank': movieRank.get_text() if movieRank else "X",
-            'image': movieImg['src'] if movieImg else "X",
+            'image': movieImg['data-original-src'] if movieImg else "X",
             'title': movieTitle.get_text().strip() if movieTitle else "X",
             'score': movieScore.get_text() if movieScore else "X",
             'eval_num': movieScoreCnt.get_text() if movieScoreCnt else "X",
