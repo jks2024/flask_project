@@ -17,27 +17,31 @@ def get_movie():
     movie_data = []
 
     for movieInfo in movieInfoList:
+        print(movieInfo)
         movieRank = movieInfo.find('span', attrs={'class': 'img_number'})
         movieImg = movieInfo.find('img')
         movieTitle = movieInfo.find('a', attrs={'class': 'tit_main'})
         movieScore = movieInfo.find('em', attrs={'class': 'rate'})
-        movieScoreCnt = movieInfo.find('a', attrs={'class': 'link_count'})
-        ticketSalesAndOpenDate = movieInfo.find_all('dd', attrs={'class': 'cont'})
-        if len(ticketSalesAndOpenDate) > 1:
-            movieTicketSales = ticketSalesAndOpenDate[0]
-            movieOpenDate = ticketSalesAndOpenDate[1]
-        else:  # If there is no open date
-            movieTicketSales = ticketSalesAndOpenDate[0]
-            movieOpenDate = None  # Set to None if there is no open date
+
+        # 예매율, 개봉일, 누적 관객수 정보 추출
+        ticketSalesAndOpenDateAndCumulative = movieInfo.find_all('dd', attrs={'class': 'cont'})
+        if len(ticketSalesAndOpenDateAndCumulative) > 2:
+            movieTicketSales = ticketSalesAndOpenDateAndCumulative[0]
+            movieOpenDate = ticketSalesAndOpenDateAndCumulative[1]
+            movieCumulative = ticketSalesAndOpenDateAndCumulative[2]
+        else:
+            movieTicketSales = ticketSalesAndOpenDateAndCumulative[0]
+            movieOpenDate = None  # 개봉일이 없는 경우
+            movieCumulative = None  # 누적 관객수가 없는 경우
 
         movie_data.append({
             'rank': movieRank.get_text() if movieRank else "X",
             'image': movieImg['data-original-src'] if movieImg else "X",
             'title': movieTitle.get_text().strip() if movieTitle else "X",
             'score': movieScore.get_text() if movieScore else "X",
-            'eval_num': movieScoreCnt.get_text() if movieScoreCnt else "X",
             'reservation': movieTicketSales.get_text().strip() if movieTicketSales else "X",
-            'open_date': movieOpenDate.get_text().strip() if movieOpenDate else "X"
+            'open_date': movieOpenDate.get_text().strip() if movieOpenDate else "X",
+            'cumulative': movieCumulative.get_text().strip() if movieCumulative else "X"
         })
 
     # Convert the movie data to JSON
