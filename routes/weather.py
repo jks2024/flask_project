@@ -84,15 +84,32 @@ def get_weather2():
 
     weather_data = {}
 
+    # sky_value와 precipitation_value 변수 초기화
+    sky_value = None
+    precipitation_value = None
+
     for k in range(len(weather_items)):
         weather_item = weather_items[k]
         obsrValue = weather_item['obsrValue']
+
         if weather_item['category'] == 'T1H': # 기온
             weather_data['tmp'] = f"{obsrValue}℃"
         elif weather_item['category'] == 'REH': # 습도
             weather_data['hum'] = f"{obsrValue}%"
         elif weather_item['category'] == 'RN1': # 시간당 강수량
             weather_data['pre'] = f"{obsrValue}mm"
+        # elif weather_item['category'] == 'SKY':  # 하늘 상태
+            #sky_value = weather_item['obsrValue']
+        elif weather_item['category'] == 'PTY':  # 강수 형태
+            precipitation_value = weather_item['obsrValue']
+
+        # print(f"하늘 상태 : {sky_value}")
+        # print(f"강수 형태 : {precipitation_value}")
+
+        #weather_data['sky'] = get_combined_weather(sky_value, precipitation_value)
+    pty_type = ["없음", "비", "비/눈", "눈", "소나기", "빗방울", "빗방울/눈날림", "눈날림"]
+    weather_data['pty'] = pty_type[int(precipitation_value)]
+
     # 딕셔너리를 JSON 형태로 변환, # ensure_ascii=False를 설정하여 JSON에 유니코드 문자 포함
     json_weather = json.dumps(weather_data, ensure_ascii=False, indent=4)
     return json_weather
