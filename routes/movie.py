@@ -14,6 +14,8 @@ def get_movie():
     movieInfoList = soup.find('ol', attrs={'class': 'movie_list'}).find_all('li') if soup.find('ol', attrs={
         'class': 'movie_list'}) else []
 
+    print(movieInfoList)
+
     movie_data = []
 
     for movieInfo in movieInfoList:
